@@ -21,7 +21,6 @@ services:
           type: redis
           name: mastodon-redis
           property: connectionString
-          property: connectionString
   - type: redis
     name: mastodon-redis
     ipAllowList: []
