@@ -6,7 +6,8 @@ services:
     rootDir: mastodon
     region: oregon # optional (defaults to oregon)
     plan: standard # optional (defaults to starter)
-    buildCommand: bundle install
+    buildCommand: git submodule update --force --recursive --init --remote
+ && bundle install
     startCommand: bundle exec puma -c config/puma.rb
     numInstances: 1 # optional (defaults to 1)
     healthCheckPath: /health
