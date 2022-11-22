@@ -2,8 +2,8 @@ services:
   # A Docker web service
   - type: web
     name: mastodon
-    repo: https://github.com/mastodon/mastodon.git
     env: ruby
+    rootDir: mastodon
     region: oregon # optional (defaults to oregon)
     plan: standard # optional (defaults to starter)
     buildCommand: bundle install
