@@ -14,8 +14,8 @@ services:
       - fromGroup: rails-secrets
       - fromGroup: mastodon-settings
       - key: DATABASE_URL
-        fromService:
-          name: mastodon
+        fromDatabase:
+          name: mastodon-db
           property: connectionString
       - key: CDN_HOST
         fromService:
@@ -37,8 +37,8 @@ services:
       - fromGroup: rails-secrets
       - fromGroup: mastodon-settings
       - key: DATABASE_URL
-        fromService:
-          name: mastodon
+        fromDatabase:
+          name: mastodon-db
           property: connectionString
       - key: REDIS_URL
         fromService:
@@ -52,7 +52,7 @@ services:
     maxmemoryPolicy: noeviction # optional (defaults to allkeys-lru)
 
 databases:
-  - name: mastodon
+  - name: mastodon-db
     ipAllowList: []
 
 envVarGroups:
