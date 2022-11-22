@@ -1,0 +1,62 @@
+services:
+  # A Docker web service
+  - type: web
+    name: mastodon
+    env: docker
+    region: oregon # optional (defaults to oregon)
+    plan: standard # optional (defaults to starter)
+    branch: main # optional (defaults to master)
+    rootDir: ./mastodon
+    dockerCommand: bundle exec puma -C config/puma.rb
+    numInstances: 1 # optional (defaults to 1)
+    healthCheckPath: /health
+    envVars:
+      - fromGroup: rails-secrets
+      - fromGroup: mastodon-settings
+      - key: DATABASE_URL
+        fromService:
+          name: mastodon
+          property: connectionString
+      - key: CDN_HOST
+        fromService:
+          name: mastodon-assets
+          type: web
+          envVarKey: RENDER_EXTERNAL_HOSTNAME
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: mastodon-redis
+          property: connectionString
+  - type: web
+    name: mastodon-assets
+    env: static
+    rootDir: ./mastodon
+    buildCommand: bundle exec rails assets:precompile
+    staticPublishPath: ./public
+    envVars:
+      - fromGroup: rails-secrets
+      - fromGroup: mastodon-settings
+      - key: DATABASE_URL
+        fromService:
+          name: mastodon
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: mastodon-redis
+          property: connectionString
+  - type: redis
+    name: mastodon-redis
+    ipAllowList: []
+    plan: starter # optional (defaults to starter)
+    maxmemoryPolicy: noeviction # optional (defaults to allkeys-lru)
+
+databases:
+  - name: mastodon
+    ipAllowList: []
+
+envVarGroups:
+  - name: mastodon-settings
+    envVars:
+      - key: RAILS_ENV
+        value: production
