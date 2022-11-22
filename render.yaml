@@ -6,7 +6,7 @@ services:
     region: oregon # optional (defaults to oregon)
     plan: standard # optional (defaults to starter)
     branch: main # optional (defaults to master)
-    rootDir: ./mastodon
+    rootDir: mastodon
     dockerCommand: bundle exec puma -C config/puma.rb
     numInstances: 1 # optional (defaults to 1)
     healthCheckPath: /health
@@ -30,7 +30,7 @@ services:
   - type: web
     name: mastodon-assets
     env: static
-    rootDir: ./mastodon
+    rootDir: mastodon
     buildCommand: bundle exec rails assets:precompile
     staticPublishPath: ./public
     envVars:
