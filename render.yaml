@@ -3,11 +3,10 @@ services:
   - type: web
     name: mastodon
     repo: https://github.com/mastodon/mastodon.git
-    env: docker
+    env: ruby
     region: oregon # optional (defaults to oregon)
     plan: standard # optional (defaults to starter)
-    dockerFilePath: ./Dockerfile
-    dockerCommand: bundle exec puma -C config/puma.rb
+    buildCommand: bundle install
     numInstances: 1 # optional (defaults to 1)
     healthCheckPath: /health
     envVars:
