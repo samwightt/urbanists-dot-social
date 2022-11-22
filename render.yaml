@@ -31,7 +31,7 @@ services:
     name: mastodon-assets
     env: static
     rootDir: mastodon
-    buildCommand: bundle exec rails assets:precompile
+    buildCommand: ls .
     staticPublishPath: ./public
     envVars:
       - fromGroup: rails-secrets
