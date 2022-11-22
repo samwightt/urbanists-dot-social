@@ -2,11 +2,11 @@ services:
   # A Docker web service
   - type: web
     name: mastodon
+    repo: https://github.com/mastodon/mastodon.git
     env: docker
     region: oregon # optional (defaults to oregon)
     plan: standard # optional (defaults to starter)
-    branch: main # optional (defaults to master)
-    rootDir: mastodon
+    dockerFilePath: ./Dockerfile
     dockerCommand: bundle exec puma -C config/puma.rb
     numInstances: 1 # optional (defaults to 1)
     healthCheckPath: /health
@@ -17,33 +17,11 @@ services:
         fromDatabase:
           name: mastodon-db
           property: connectionString
-      - key: CDN_HOST
-        fromService:
-          name: mastodon-assets
-          type: web
-          envVarKey: RENDER_EXTERNAL_HOSTNAME
       - key: REDIS_URL
         fromService:
           type: redis
           name: mastodon-redis
           property: connectionString
-  - type: web
-    name: mastodon-assets
-    env: static
-    rootDir: mastodon
-    buildCommand: ls .
-    staticPublishPath: ./public
-    envVars:
-      - fromGroup: rails-secrets
-      - fromGroup: mastodon-settings
-      - key: DATABASE_URL
-        fromDatabase:
-          name: mastodon-db
-          property: connectionString
-      - key: REDIS_URL
-        fromService:
-          type: redis
-          name: mastodon-redis
           property: connectionString
   - type: redis
     name: mastodon-redis
